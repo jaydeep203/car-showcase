@@ -79,7 +79,6 @@ const CarCard = ({car}:CarCardProps) => {
 
         <CarDetails
                 isOpen={isOpen}
-                Amount={carRent}
                 closeModal={()=>setIsOpen(false)}
                 car={car}
             />
