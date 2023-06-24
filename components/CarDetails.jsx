@@ -1,12 +1,11 @@
 "use client";
 import { CarProps } from '@/types';
-import React, {Fragment, useState} from 'react';
+import React, {Fragment} from 'react';
 import Image from 'next/image';
 import {Dialog, Transition} from "@headlessui/react";
 import { generateCarImageUrl } from '@/utils';
-import CustomButton from './CustomButton';
-import Script from 'next/script';
 
+<<<<<<< HEAD:components/CarDetails.jsx
 // interface CarDetailsProps {
 //     isOpen:boolean;
 //     Amount:string;
@@ -68,14 +67,17 @@ const CarDetails = ({isOpen, Amount, closeModal, car}) => {
 
     
 
+=======
+interface CarDetailsProps {
+    isOpen:boolean;
+    closeModal:() => void;
+    car:CarProps;
+}
+
+const CarDetails = ({isOpen, closeModal, car}:CarDetailsProps) => {
+>>>>>>> parent of 30ec073 (Razorpay Payment Added):components/CarDetails.tsx
   return (
-    
     <>
-        <Script
-            id={"razorpay-checkout-js"}
-            src={'https://checkout.razorpay.com/v1/checkout.js'}
-        />
-            
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10"
                 onClose={closeModal}
@@ -142,12 +144,7 @@ const CarDetails = ({isOpen, Amount, closeModal, car}) => {
                                         </div>
                                     </div>
                                 </div>
-                                <button
-                                    className='custom-btn w-full py-[16px] rounded-full bg-primary-blue'
-                                    onClick={()=>CheckOutHandler(Amount)}
-                                >
-                                    <span className='flex-1 text-white text-[14px] leading-[17px] font-bold' >CheckOut</span>
-                                </button>
+
                                 <div className="flex-1 flex-col gap-2">
                                     <h2 className='font-semibold text-xl capitalize'>
                                         {car.make} {car.model}
@@ -161,7 +158,6 @@ const CarDetails = ({isOpen, Amount, closeModal, car}) => {
                                         ))}
                                     </div>
                                 </div>
-                                
 
                             </Dialog.Panel>
                         </Transition.Child>
