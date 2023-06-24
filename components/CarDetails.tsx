@@ -1,19 +1,82 @@
 "use client";
 import { CarProps } from '@/types';
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import Image from 'next/image';
 import {Dialog, Transition} from "@headlessui/react";
 import { generateCarImageUrl } from '@/utils';
+import CustomButton from './CustomButton';
+import Script from 'next/script';
 
 interface CarDetailsProps {
     isOpen:boolean;
+    Amount:string;
     closeModal:() => void;
     car:CarProps;
 }
 
-const CarDetails = ({isOpen, closeModal, car}:CarDetailsProps) => {
+
+const CarDetails = ({isOpen, Amount, closeModal, car}:CarDetailsProps) => {
+    const CheckOutHandler = async(Amount:string) => {
+
+        
+
+        try{
+            const res = await fetch("/api/getkey");
+            let data = await res.json();
+            const key = data.key;
+            const response = await fetch("/api/checkout", {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    Amount
+                })
+            });
+            data = await response.json();
+            const order = data.order;
+            const options = {
+                key: key,
+                amount: order.amount, 
+                currency: "USD",
+                name: "Jaydeep",
+                description: "Test Razorpay Transaction",
+                image: "https://avatars.githubusercontent.com/u/105545949?v=4",
+                order_id: order.id,
+                callback_url: "/api/paymentverification",
+                prefill: {
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                notes: {
+                    "address": "Razorpay Corporate Office"
+                },
+                theme: {
+                    "color": "#121212"
+                }
+            };
+    
+            const razor = new window.Razorpay(options);
+            razor.open();
+
+            
+    
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    
+
   return (
+    
     <>
+        <Script
+            id={"razorpay-checkout-js"}
+            src={'https://checkout.razorpay.com/v1/checkout.js'}
+        />
+            
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10"
                 onClose={closeModal}
@@ -80,7 +143,12 @@ const CarDetails = ({isOpen, closeModal, car}:CarDetailsProps) => {
                                         </div>
                                     </div>
                                 </div>
-
+                                <button
+                                    className='custom-btn w-full py-[16px] rounded-full bg-primary-blue'
+                                    onClick={()=>CheckOutHandler(Amount)}
+                                >
+                                    <span className='flex-1 text-white text-[14px] leading-[17px] font-bold' >CheckOut</span>
+                                </button>
                                 <div className="flex-1 flex-col gap-2">
                                     <h2 className='font-semibold text-xl capitalize'>
                                         {car.make} {car.model}
@@ -94,6 +162,7 @@ const CarDetails = ({isOpen, closeModal, car}:CarDetailsProps) => {
                                         ))}
                                     </div>
                                 </div>
+                                
 
                             </Dialog.Panel>
                         </Transition.Child>
