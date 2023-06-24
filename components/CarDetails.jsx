@@ -7,18 +7,17 @@ import { generateCarImageUrl } from '@/utils';
 import CustomButton from './CustomButton';
 import Script from 'next/script';
 
-interface CarDetailsProps {
-    isOpen:boolean;
-    Amount:string;
-    closeModal:() => void;
-    car:CarProps;
-}
+// interface CarDetailsProps {
+//     isOpen:boolean;
+//     Amount:string;
+//     closeModal:() => void;
+//     car:CarProps;
+// }
 
 
-const CarDetails = ({isOpen, Amount, closeModal, car}:CarDetailsProps) => {
-    const CheckOutHandler = async(Amount:string) => {
 
-        
+const CarDetails = ({isOpen, Amount, closeModal, car}) => {
+    const CheckOutHandler = async(Amount) => { 
 
         try{
             const res = await fetch("/api/getkey");
@@ -56,7 +55,7 @@ const CarDetails = ({isOpen, Amount, closeModal, car}:CarDetailsProps) => {
                     "color": "#121212"
                 }
             };
-    
+            
             const razor = new window.Razorpay(options);
             razor.open();
 
